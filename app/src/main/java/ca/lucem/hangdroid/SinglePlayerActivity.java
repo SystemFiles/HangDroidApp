@@ -5,8 +5,10 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.renderscript.RenderScript;
+import android.text.TextPaint;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,13 +23,19 @@ import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Scanner;
+
 public class SinglePlayerActivity extends Activity {
 
     private String phrase;
-    private String[] phraseList = {"Five", "Chick", "Flame", "Crazy"};
+    private String[] phraseList;
     private int failCounter;
     private int guessedLetters;
-    public double sessionScore; // The score you got this session.
+    public static double sessionScore; // The score you got this session.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +46,20 @@ public class SinglePlayerActivity extends Activity {
         failCounter = 0;
         sessionScore = 0;
         guessedLetters = 0;
-        phrase = getWord();
+        if (phrase == null) { // Only load the file once.
+            phrase = getWord();
+        }
+    }
+
+    public String getWordList() {
+        String wordList = "";
+        InputStream fileInput = getResources().openRawResource(ca.lucem.hangdroid.R.raw.wordfile);
+        Scanner scan = new Scanner(fileInput);
+
+        while (scan.hasNext()) { // Get all the text from the file.
+            wordList += scan.nextLine();
+        }
+        return wordList;
     }
 
     /**
@@ -48,11 +69,24 @@ public class SinglePlayerActivity extends Activity {
      * @return phrase
      */
     public String getWord() {
+        /*TODO: Use Scanner.class to read from a text file containing all the words we want to use.
+        TODO: Then add them to the array by "phraseList = rawWords.split(" ");" */
+
+        phraseList = getWordList().split(" "); // Full Text input.
+        Log.d("INFO", "The length of phraseList: " + phraseList.length);
 
         int x = (int) (Math.random() * (phraseList.length - 1)) + 1;
         phrase = phraseList[x];
-
         return phrase;
+    }
+
+    /**
+     * Opens the game over activity.
+     */
+    public void showGameOverScreen() {
+        Intent gameOverIntent = new Intent(this, GameOverActivity.class);
+
+        startActivity(gameOverIntent); // Opens game over screen.
     }
 
     /**
@@ -77,6 +111,16 @@ public class SinglePlayerActivity extends Activity {
     }
 
     /**
+     * Gets score from this game session.
+     *
+     * @return sessionScore The score from the current game session.
+     */
+    public double getSessionScore() {
+        sessionScore = Math.round(guessedLetters * 15.042 / failCounter + 1); // Only if you win do you get a score.
+        return sessionScore;
+    }
+
+    /**
      * This method returns a boolean value of true or false depending on whether
      * the given letter is contained in the given phrase
      *
@@ -92,12 +136,41 @@ public class SinglePlayerActivity extends Activity {
 
                 // Contains letter: Display on correct guesses
                 showLettersAtIndex(x,letter.charAt(0));
+
+                if (guessedLetters == phrase.length()) {
+                    AlertDialog alertDialog = new AlertDialog.Builder(SinglePlayerActivity.this).create();
+                    alertDialog.setTitle("You WIN!!!!");
+                    alertDialog.setMessage("You won! You saved Jeffery <3");
+                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "You're Welcome :)",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    getSessionScore();
+                                    dialog.dismiss();
+                                    showGameOverScreen();
+                                }
+                            });
+                    alertDialog.show();
+                }
             }
         }
 
         if (!containsLetter) { // if phrase does not contain letter.
             showWrongLetters(letter.charAt(0));
             Log.d("HANGDROIDLOG", "Killing droid");
+            if (failCounter >= 5) {
+                AlertDialog alertDialog = new AlertDialog.Builder(SinglePlayerActivity.this).create();
+                alertDialog.setTitle("Game Over!");
+                alertDialog.setMessage("Poor Jeffery, the Android, died due to your stupidity! \n\nThe phrase: " + phrase);
+                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "I'm Sorry :(",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                getSessionScore();
+                                dialog.dismiss();
+                                showGameOverScreen();
+                            }
+                        });
+                alertDialog.show();
+            }
         }
     }
 
@@ -140,19 +213,7 @@ public class SinglePlayerActivity extends Activity {
             Log.d("HANGDROIDLOG", letter + " was added to the wrong guess list.");
             failCounter++; // Increment the fail counter.
             showNewBodyPart();
-            if (failCounter >= 5) {
-                AlertDialog alertDialog = new AlertDialog.Builder(SinglePlayerActivity.this).create();
-                alertDialog.setTitle("Game Over!");
-                alertDialog.setMessage("Poor Jeffery, the Android, died due to your stupidity!");
-                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "I'm Sorry :(",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                                returnToStart();
-                            }
-                        });
-                alertDialog.show();
-            }
+
             textInput.setText(""); // Clear input box
         }
     }
@@ -180,24 +241,9 @@ public class SinglePlayerActivity extends Activity {
         guessedLetters++; // Increment how many letters were correctly guessed.
         textView.setText(Character.toString(letter));
         Log.d("HANGDROIDLOG", "Word entered into correct spot");
+
+
         textInput.setText("");
-
-        if (guessedLetters == phrase.length()) {
-            sessionScore = Math.round(guessedLetters * 12612.0211 / failCounter + 1); // Only if you win do you get a score.
-
-            AlertDialog alertDialog = new AlertDialog.Builder(SinglePlayerActivity.this).create();
-            alertDialog.setTitle("You WIN!!!!");
-            alertDialog.setMessage("YOU SAVED POOR LITTLE JEFFERY!! HE WILL FOREVER LOVE U!! <3 \n Your Score: " + sessionScore);
-            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "You're Welcome :)",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                            returnToStart();
-                        }
-                    });
-            alertDialog.show();
-        }
-
     }
 
 }

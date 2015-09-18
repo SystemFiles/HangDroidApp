@@ -24,6 +24,17 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ca.lucem.hangdroid.StartScreen" />
         </activity>
+        <activity
+            android:name=".GameOverActivity"
+            android:label="@string/title_activity_game_over" >
+        </activity>
+        <activity
+            android:name=".HighScoreActivity"
+            android:label="@string/title_activity_high_score" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ca.lucem.hangdroid.StartScreen" />
+        </activity>
     </application>
 
 </manifest>

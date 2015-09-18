@@ -38,6 +38,8 @@ public class StartScreen extends Activity {
      * @param view
      */
     public void openScores(View view) {
+        Intent scoreIntent = new Intent(this, HighScoreActivity.class);
 
+        startActivity(scoreIntent);
     }
 }

@@ -4,4 +4,6 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_single_player">HangDroid | Singleplayer</string>
+    <string name="title_activity_game_over">Game Over!</string>
+    <string name="title_activity_high_score">High Scores</string>
 </resources>
