@@ -69,9 +69,6 @@ public class SinglePlayerActivity extends Activity {
      * @return phrase
      */
     public String getWord() {
-        /*TODO: Use Scanner.class to read from a text file containing all the words we want to use.
-        TODO: Then add them to the array by "phraseList = rawWords.split(" ");" */
-
         phraseList = getWordList().split(" "); // Full Text input.
         Log.d("INFO", "The length of phraseList: " + phraseList.length);
 
