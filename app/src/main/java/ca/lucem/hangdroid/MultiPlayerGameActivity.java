@@ -23,7 +23,7 @@ import java.util.Scanner;
 public class MultiPlayerGameActivity extends Activity {
 
     private String phrase;
-    private String[] phraseList;
+    private String hint;
     private int failCounter;
     private int guessedLetters;
     public double sessionScore; // The score you got this session.
@@ -46,6 +46,8 @@ public class MultiPlayerGameActivity extends Activity {
         if (phrase == null) { // Only load the file once.
             phrase = getIntent().getStringExtra("WORD_INTRODUCED");
             Log.d("INFO","The phrase introduced is " + phrase);
+            hint = getIntent().getStringExtra("HINT_INTRODUCED");
+            Log.d("INFO", "The Hint Introduced is " + hint);
         }
         createTextViews(phrase);
     }
@@ -98,6 +100,13 @@ public class MultiPlayerGameActivity extends Activity {
             Log.d("HANGDROIDLOG", "Letter(l) was not assigned a value..");
         }
 
+    }
+
+    /**
+     * Sends the user a Toast containing the given hint.
+     */
+    public void getHint(View view) {
+        Toast.makeText(this, "Hint: " + hint, Toast.LENGTH_LONG).show();
     }
 
     /**
@@ -206,15 +215,6 @@ public class MultiPlayerGameActivity extends Activity {
 
             textInput.setText(""); // Clear input box
         }
-    }
-
-    /**
-     * Returns the user to start screen after game over.
-     */
-    private void returnToStart() {
-        Intent intent = new Intent(this, StartScreen.class);
-
-        startActivity(intent); // Returns user to startScreen
     }
 
     /**

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.Toast;
 
 /**
  * Full Screen Activity for entering a word to be guessed.
@@ -31,13 +32,23 @@ public class MultiPlayerStartActivity extends Activity {
      * @param view The current view
      */
     public void continueGame(View view) {
-        EditText editText = (EditText) findViewById(R.id.editTextWord);
-        String wordToSend = editText.getText().toString();
+        EditText editTextWord = (EditText) findViewById(R.id.editTextWord);
+        EditText editTextHint = (EditText) findViewById(R.id.editTextHint);
 
-        // Create intent and have word included.
-        Intent intent = new Intent(this,MultiPlayerGameActivity.class);
-        intent.putExtra("WORD_INTRODUCED", wordToSend);
+        if (!editTextWord.getText().toString().equalsIgnoreCase("") &&
+                !editTextHint.getText().toString().equalsIgnoreCase("")) {
+            String wordToSend = editTextWord.getText().toString();
+            String hintToSend = editTextHint.getText().toString();
 
-        startActivity(intent); // Start Multiplayer game.
+            // Create intent and have word included.
+            Intent intent = new Intent(this, MultiPlayerGameActivity.class);
+            intent.putExtra("WORD_INTRODUCED", wordToSend);
+            intent.putExtra("HINT_INTRODUCED", hintToSend);
+
+            startActivity(intent); // Start Multiplayer game.
+        } else {
+            Toast.makeText(this, "Please fill out both fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
     }
 }

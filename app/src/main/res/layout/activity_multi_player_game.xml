@@ -27,9 +27,10 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Enter Letter: "
             android:id="@+id/TextViewEnter"
-            android:layout_marginLeft="60dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="5dp"
-            android:layout_marginRight="4dp" />
+            android:layout_marginRight="4dp"
+            android:gravity="center_vertical" />
 
         <EditText
             android:layout_width="25dp"
@@ -37,7 +38,8 @@
             android:id="@+id/editTextInput"
             android:layout_marginRight="4dp"
             android:phoneNumber="false"
-            android:maxLength="1" />
+            android:maxLength="1"
+            android:gravity="center_vertical" />
 
         <Button
             android:layout_width="wrap_content"
@@ -45,7 +47,17 @@
             android:text="Check Value"
             android:id="@+id/buttonCheckVal"
             android:onClick="checkLetter"
-            android:layout_marginRight="4dp" />
+            android:layout_marginRight="4dp"
+            android:gravity="center_vertical" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hint"
+            android:id="@+id/buttonHint"
+            android:onClick="getHint"
+            android:layout_marginRight="4dp"
+            android:hint="Get a Hint" />
     </LinearLayout>
 
     <LinearLayout
