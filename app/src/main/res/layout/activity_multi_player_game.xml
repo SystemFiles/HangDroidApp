@@ -56,7 +56,8 @@
         android:layout_below="@+id/hangDroid"
         android:layout_alignStart="@+id/hangDroid"
         android:layout_centerHorizontal="true"
-        android:layout_marginLeft="105dp">
+        android:layout_marginLeft="105dp"
+        android:gravity="center_horizontal">
 
         <!-- Add Text Views Below For Letters -->
 

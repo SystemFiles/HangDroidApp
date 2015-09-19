@@ -7,4 +7,4 @@
     android:text="_"
     android:id="@+id/textView4"
     android:textSize="40dp"
-    android:layout_marginLeft="10dp" />
+    android:paddingRight="10dp" />
