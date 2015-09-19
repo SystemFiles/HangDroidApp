@@ -2,7 +2,9 @@ package ca.lucem.hangdroid;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,8 +27,21 @@ public class GameOverActivity extends Activity {
 
         TextView textViewWord = (TextView) findViewById(R.id.textViewWord);
         TextView textView = (TextView) findViewById(R.id.textViewScore);
+        TextView textViewGameOver = (TextView) findViewById(R.id.textViewGameOver);
+        try { // Do font stuff after loading contentview
+            // Font path
+            String fontPath = "fonts/bebas.otf";
+            // Loading Font Face
+            Typeface tf = Typeface.createFromAsset(getAssets(), fontPath);
+            // Applying font
+            textViewWord.setTypeface(tf);
+            textView.setTypeface(tf);
+            textViewGameOver.setTypeface(tf);
+        } catch (RuntimeException ex) {
+            Log.d("SEVRE", "ASSET NOT FOUND:" + ex.getMessage());
+        }
         textView.setText(textView.getText() + " " + SinglePlayerActivity.sessionScore);
-        textViewWord.setText("The word was: " + SinglePlayerActivity.globalPhrase);
+        textViewWord.setText("The word was  '" + SinglePlayerActivity.globalPhrase + "'");
     }
 
     /**

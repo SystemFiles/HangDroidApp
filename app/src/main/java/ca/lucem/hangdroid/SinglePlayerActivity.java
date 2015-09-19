@@ -84,6 +84,9 @@ public class SinglePlayerActivity extends Activity {
         int x = (int) (Math.random() * (phraseList.length - 1)) + 1;
         phrase = phraseList[x];
         globalPhrase = phrase; // Set global variable for use in GameOverActivity
+
+        Log.d("INFO", "The phrase is: " + phrase); // For testing purposes
+
         return phrase;
     }
 
