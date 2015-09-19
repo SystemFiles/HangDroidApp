@@ -14,6 +14,8 @@ import android.widget.TextView;
 
 public class GameOverActivity extends Activity {
 
+    private String cameFrom;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,8 +42,15 @@ public class GameOverActivity extends Activity {
         } catch (RuntimeException ex) {
             Log.d("SEVRE", "ASSET NOT FOUND:" + ex.getMessage());
         }
-        textView.setText(textView.getText() + " " + SinglePlayerActivity.sessionScore);
-        textViewWord.setText("The word was  '" + SinglePlayerActivity.globalPhrase + "'");
+
+        double endScore = getIntent().getDoubleExtra("SESSION_SCORE",0.0);
+        String endWord = getIntent().getStringExtra("SESSION_WORD");
+        cameFrom = getIntent().getStringExtra("SENDER");
+
+        textView.setText(textView.getText() + " " + endScore);
+        textViewWord.setText("The word was  '" + endWord + "'");
+
+        Log.d("INFO", "The Package this came from is: " + cameFrom);
     }
 
     /**
@@ -50,9 +59,15 @@ public class GameOverActivity extends Activity {
      * @param view The current view.
      */
     public void dontSave(View view) {
-        Intent singePlayerIntent = new Intent(this, SinglePlayerActivity.class);
+        if (cameFrom.equalsIgnoreCase("single")) {
+            Intent singePlayerIntent = new Intent(this, SinglePlayerActivity.class);
 
-        startActivity(singePlayerIntent); // Returns user to SinglePlayerActivity
+            startActivity(singePlayerIntent); // Returns user to SinglePlayerActivity
+        } else {
+            Intent multiPlayerIntent = new Intent(this, MultiPlayerStartActivity.class);
+
+            startActivity(multiPlayerIntent); // Returns user to multiplayer game.
+        }
     }
 
     /**
@@ -61,11 +76,16 @@ public class GameOverActivity extends Activity {
      * @param view The current view.
      */
     public void saveScore(View view) {
-        Intent intent = new Intent(this, StartScreen.class);
+        if(cameFrom.equalsIgnoreCase("single")) {
+            Intent singlePlayerIntent = new Intent(this, StartScreen.class);
 
-        // TODO: Save high scores to local file.
+            // TODO: Save high scores to local file.
+            startActivity(singlePlayerIntent);
+        } else {
+            Intent multiPlayerIntent = new Intent(this, MultiPlayerStartActivity.class);
 
-        startActivity(intent);
+            startActivity(multiPlayerIntent);
+        }
     }
 
 }

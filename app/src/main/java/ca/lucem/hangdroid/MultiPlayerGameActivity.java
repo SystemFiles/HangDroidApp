@@ -2,36 +2,25 @@ package ca.lucem.hangdroid;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.os.Bundle;
-import android.renderscript.RenderScript;
-import android.text.TextPaint;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.R;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Scanner;
 
-public class SinglePlayerActivity extends Activity {
+public class MultiPlayerGameActivity extends Activity {
 
     private String phrase;
     private String[] phraseList;
@@ -48,44 +37,33 @@ public class SinglePlayerActivity extends Activity {
         //Remove notification bar
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         //set content view AFTER WINDOW_FEATURE sequence (to avoid crash)
-        this.setContentView(ca.lucem.hangdroid.R.layout.activity_single_player);
+        this.setContentView(R.layout.activity_multi_player_game);
 
         // Reset all counters/scores.
         failCounter = 0;
         sessionScore = 0;
         guessedLetters = 0;
         if (phrase == null) { // Only load the file once.
-            phrase = getWord();
+            phrase = getIntent().getStringExtra("WORD_INTRODUCED");
+            Log.d("INFO","The phrase introduced is " + phrase);
         }
-    }
-
-    public String getWordList() {
-        String wordList = "";
-        InputStream fileInput = getResources().openRawResource(ca.lucem.hangdroid.R.raw.wordfile);
-        Scanner scan = new Scanner(fileInput);
-
-        while (scan.hasNext()) { // Get all the text from the file.
-            wordList += scan.nextLine();
-        }
-        return wordList;
+        createTextViews(phrase);
     }
 
     /**
-     * This method will access a database of phrases and words, pick a random one and
-     * return the resulting String.
+     * Creates text views based upon how many characters are in phrase.
      *
-     * @return phrase
+     * @param phrase Used to count the number of letters in phrase to determine how many '_' to put.
      */
-    public String getWord() {
-        phraseList = getWordList().split(" "); // Full Text input.
-        Log.d("INFO", "The length of phraseList: " + phraseList.length);
+    public void createTextViews(String phrase) {
+        // The layout to be added to.
+        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.LayoutWord);
 
-        int x = (int) (Math.random() * (phraseList.length - 1)) + 1;
-        phrase = phraseList[x];
+        for (int x = 0; x < phrase.length(); x++) {
+            TextView newTextView = (TextView) getLayoutInflater().inflate(R.layout.text_view_dinamic, null);
 
-        Log.d("INFO", "The phrase is: " + phrase); // For testing purposes
-
-        return phrase;
+            linearLayout.addView(newTextView); // Adds the new word view to the layout.
+        }
     }
 
     /**
@@ -96,7 +74,7 @@ public class SinglePlayerActivity extends Activity {
 
         gameOverIntent.putExtra("SESSION_SCORE", sessionScore);
         gameOverIntent.putExtra("SESSION_WORD", phrase);
-        gameOverIntent.putExtra("SENDER", "Single");
+        gameOverIntent.putExtra("SENDER", "Multi");
 
         startActivity(gameOverIntent); // Opens game over screen.
     }
@@ -150,7 +128,7 @@ public class SinglePlayerActivity extends Activity {
                 showLettersAtIndex(x,letter.charAt(0));
 
                 if (guessedLetters == phrase.length()) {
-                    AlertDialog alertDialog = new AlertDialog.Builder(SinglePlayerActivity.this).create();
+                    AlertDialog alertDialog = new AlertDialog.Builder(MultiPlayerGameActivity.this).create();
                     alertDialog.setTitle("You WIN!!!!");
                     alertDialog.setMessage("You won! You saved Jeffery <3");
                     alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "You're Welcome :)",
@@ -170,7 +148,7 @@ public class SinglePlayerActivity extends Activity {
             showWrongLetters(letter.charAt(0));
             Log.d("HANGDROIDLOG", "Killing droid");
             if (failCounter >= 5) {
-                AlertDialog alertDialog = new AlertDialog.Builder(SinglePlayerActivity.this).create();
+                AlertDialog alertDialog = new AlertDialog.Builder(MultiPlayerGameActivity.this).create();
                 alertDialog.setTitle("Game Over!");
                 alertDialog.setMessage("Poor Jeffery, the Android, died due to your stupidity! \n\nThe phrase: " + phrase);
                 alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "I'm Sorry :(",

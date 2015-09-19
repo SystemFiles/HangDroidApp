@@ -55,7 +55,9 @@ public class StartScreen extends Activity {
      * @param view
      */
     public void openMultiplayer(View view) {
+        Intent myIntent = new Intent(this, MultiPlayerStartActivity.class);
 
+        startActivity(myIntent); // Start multiplayer game.
     }
 
     /**

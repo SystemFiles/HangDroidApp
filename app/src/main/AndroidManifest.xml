@@ -25,6 +25,14 @@
                 android:value="ca.lucem.hangdroid.StartScreen" />
         </activity>
         <activity
+            android:name=".MultiPlayerGameActivity"
+            android:label="@string/title_activity_single_player"
+            android:parentActivityName=".MultiPlayerStartActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ca.lucem.hangdroid.MultiPlayerStartActivity" />
+        </activity>
+        <activity
             android:name=".GameOverActivity"
             android:label="@string/title_activity_game_over" >
         </activity>
@@ -36,18 +44,14 @@
                 android:value="ca.lucem.hangdroid.StartScreen" />
         </activity>
         <activity
-            android:name=".MultiPlayerActivity"
+            android:name=".MultiPlayerStartActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_multi_player"
-            android:parentActivityName=".StartScreen" >
+            android:parentActivityName=".StartScreen"
+            android:theme="@style/FullscreenTheme" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ca.lucem.hangdroid.StartScreen" />
-        </activity>
-        <activity
-            android:name=".SplashScreenActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_splash_screen"
-            android:theme="@style/FullscreenTheme" >
         </activity>
     </application>
 
