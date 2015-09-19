@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 public class GameOverActivity extends Activity {
@@ -13,10 +15,18 @@ public class GameOverActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game_over);
 
+        //Remove title bar
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //Remove notification bar
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        //set content view AFTER WINDOW_FEATURE sequence (to avoid crash)
+        this.setContentView(R.layout.activity_game_over);
+
+        TextView textViewWord = (TextView) findViewById(R.id.textViewWord);
         TextView textView = (TextView) findViewById(R.id.textViewScore);
         textView.setText(textView.getText() + " " + SinglePlayerActivity.sessionScore);
+        textViewWord.setText("The word was: " + SinglePlayerActivity.globalPhrase);
     }
 
     /**

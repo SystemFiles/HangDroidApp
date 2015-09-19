@@ -6,4 +6,5 @@
     <string name="title_activity_single_player">HangDroid | Singleplayer</string>
     <string name="title_activity_game_over">Game Over!</string>
     <string name="title_activity_high_score">High Scores</string>
+    <string name="title_activity_multi_player">HangDroid | Multiplayer</string>
 </resources>

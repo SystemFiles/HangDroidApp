@@ -14,6 +14,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.R;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -31,6 +33,7 @@ import java.util.Scanner;
 
 public class SinglePlayerActivity extends Activity {
 
+    public static String globalPhrase;
     private String phrase;
     private String[] phraseList;
     private int failCounter;
@@ -40,7 +43,13 @@ public class SinglePlayerActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(ca.lucem.hangdroid.R.layout.activity_single_player);
+
+        //Remove title bar
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //Remove notification bar
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        //set content view AFTER WINDOW_FEATURE sequence (to avoid crash)
+        this.setContentView(ca.lucem.hangdroid.R.layout.activity_single_player);
 
         // Reset all counters/scores.
         failCounter = 0;
@@ -74,6 +83,7 @@ public class SinglePlayerActivity extends Activity {
 
         int x = (int) (Math.random() * (phraseList.length - 1)) + 1;
         phrase = phraseList[x];
+        globalPhrase = phrase; // Set global variable for use in GameOverActivity
         return phrase;
     }
 

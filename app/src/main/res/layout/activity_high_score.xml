@@ -9,6 +9,7 @@
         android:layout_height="match_parent"
         android:id="@+id/listViewScores"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:background="#6C7A89" />
 
 </RelativeLayout>

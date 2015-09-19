@@ -35,6 +35,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ca.lucem.hangdroid.StartScreen" />
         </activity>
+        <activity
+            android:name=".MultiPlayerActivity"
+            android:label="@string/title_activity_multi_player"
+            android:parentActivityName=".StartScreen" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ca.lucem.hangdroid.StartScreen" />
+        </activity>
     </application>
 
 </manifest>
